@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Resume Builder</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .font-sans { font-family: 'Segoe UI', sans-serif; }
+    .font-serif { font-family: 'Georgia', serif; }
+    .font-mono { font-family: 'Courier New', monospace; }
+
+    .animated-bg {
+      background: linear-gradient(-45deg, #3b82f6, #9333ea, #10b981, #f59e0b);
+      background-size: 400% 400%;
+      animation: gradientFlow 12s ease infinite;
+    }
+
+    @keyframes gradientFlow {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+  </style>
+</head>
+<body id="mainBody" class="animated-bg min-h-screen text-gray-900 font-sans transition-all duration-300">
+
+  <div class="max-w-md mx-auto p-6 mt-10 rounded-2xl shadow-2xl bg-white/30 backdrop-blur-xl border border-white/40" id="mainContainer">
+    <h1 class="text-3xl font-bold mb-4 text-center text-white drop-shadow">🚀 Smart Resume Generator</h1>
+
+    <!-- Font and Theme Controls -->
+    <div class="flex justify-between gap-2 mb-4">
+      <select id="themeSelect" class="flex-1 p-2 rounded">
+        <option value="light">🌞 Light</option>
+        <option value="dark">🌙 Dark</option>
+      </select>
+      <select id="fontSelect" class="flex-1 p-2 rounded">
+        <option value="sans">Sans</option>
+        <option value="serif">Serif</option>
+        <option value="mono">Mono</option>
+      </select>
+    </div>
+
+    <form id="resumeForm" class="space-y-3">
+      <input type="text" placeholder="Full Name" id="name" class="w-full p-2 border rounded" required />
+      <input type="email" placeholder="Email" id="email" class="w-full p-2 border rounded" required />
+      <input type="text" placeholder="Phone" id="phone" class="w-full p-2 border rounded" required />
+      <textarea placeholder="Skills (comma separated)" id="skills" class="w-full p-2 border rounded"></textarea>
+      <textarea placeholder="Experience" id="experience" class="w-full p-2 border rounded"></textarea>
+      <textarea placeholder="Education" id="education" class="w-full p-2 border rounded"></textarea>
+
+      <div class="flex gap-2">
+        <button type="submit" class="flex-1 bg-blue-600 text-white py-2 rounded">⚡ Generate</button>
+        <button type="button" id="fillDummy" class="flex-1 bg-gray-800 text-white py-2 rounded">✨ Auto Fill</button>
+      </div>
+    </form>
+
+    <div id="resumeOutput" class="mt-6 bg-white p-4 rounded shadow hidden">
+      <h2 class="text-xl font-semibold mb-2">Generated Resume</h2>
+      <div id="outputContent" class="text-sm sm:text-base"></div>
+      <button onclick="downloadResume()" class="mt-4 w-full bg-green-600 text-white py-2 rounded">📄 Download TXT</button>
+    </div>
+  </div>
+
+  <script>
+    const themeSelect = document.getElementById("themeSelect");
+    const body = document.getElementById("mainBody");
+
+    themeSelect.addEventListener("change", () => {
+      if (themeSelect.value === "dark") {
+        body.classList.remove("text-gray-900");
+        body.classList.add("text-white");
+      } else {
+        body.classList.add("text-gray-900");
+        body.classList.remove("text-white");
+      }
+    });
+
+    const fontSelect = document.getElementById("fontSelect");
+    fontSelect.addEventListener("change", () => {
+      body.classList.remove("font-sans", "font-serif", "font-mono");
+      body.classList.add(`font-${fontSelect.value}`);
+    });
+
+    const form = document.getElementById('resumeForm');
+    const output = document.getElementById('resumeOutput');
+    const content = document.getElementById('outputContent');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const skills = document.getElementById('skills').value.split(',');
+      const experience = document.getElementById('experience').value;
+      const education = document.getElementById('education').value;
+
+      content.innerHTML = `
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Skills:</strong> ${skills.map(s => s.trim()).join(', ')}</p>
+        <p><strong>Experience:</strong> ${experience}</p>
+        <p><strong>Education:</strong> ${education}</p>
+      `;
+
+      output.classList.remove('hidden');
+    });
+
+    document.getElementById('fillDummy').addEventListener('click', () => {
+      document.getElementById('name').value = "Karan Sharma";
+      document.getElementById('email').value = "karan@example.com";
+      document.getElementById('phone').value = "9876543210";
+      document.getElementById('skills').value = "HTML, CSS, JS, React";
+      document.getElementById('experience').value = "1 Year Intern at Webify";
+      document.getElementById('education').value = "12th pass - CBSE (2024)";
+    });
+
+    function downloadResume() {
+      const blob = new Blob([content.innerText], { type: "text/plain;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "resume.txt";
+      link.click();
+    }
+  </script>
+</body>
+</html>
