@@ -70,108 +70,93 @@
       <button onclick="downloadResume()" class="mt-4 w-full bg-green-600 text-white py-2 rounded">📄 Download TXT</button>
     </div>
   </div>
+<script>
+  const themeSelect = document.getElementById("themeSelect");
+  const fontSelect = document.getElementById("fontSelect");
+  const body = document.getElementById("mainBody");
+  const form = document.getElementById("resumeForm");
+  const output = document.getElementById("resumeOutput");
+  const content = document.getElementById("outputContent");
+  const fillDummy = document.getElementById("fillDummy");
 
-  <script>
-    const themeSelect = document.getElementById("themeSelect");
-    const body = document.getElementById("mainBody");
+  // 🌙 Theme switcher
+  themeSelect.addEventListener("change", () => {
+    body.classList.toggle("text-white", themeSelect.value === "dark");
+    body.classList.toggle("text-gray-900", themeSelect.value !== "dark");
+  });
 
-    themeSelect.addEventListener("change", () => {
-      if (themeSelect.value === "dark") {
-        body.classList.remove("text-gray-900");
-        body.classList.add("text-white");
-      } else {
-        body.classList.add("text-gray-900");
-        body.classList.remove("text-white");
-      }
-    });
+  // 🔤 Font switcher
+  fontSelect.addEventListener("change", () => {
+    body.classList.remove("font-sans", "font-serif", "font-mono");
+    body.classList.add(`font-${fontSelect.value}`);
+  });
 
-    const fontSelect = document.getElementById("fontSelect");
-    fontSelect.addEventListener("change", () => {
-      body.classList.remove("font-sans", "font-serif", "font-mono");
-      body.classList.add(`font-${fontSelect.value}`);
-    });
+  // 🧠 Resume Generator
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-    const form = document.getElementById('resumeForm');
-    const output = document.getElementById('resumeOutput');
-    const content = document.getElementById('outputContent');
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const skills = document.getElementById("skills").value.split(",").map(s => s.trim()).filter(Boolean);
+    const experience = document.getElementById("experience").value.trim();
+    const education = document.getElementById("education").value.trim();
 
-    form.addEventListener('submit', (e) => {
-  e.preventDefault();
+    // ✨ Resume Output
+    content.innerHTML = `
+      <div class="bg-white/20 backdrop-blur-xl p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] ring-2 ring-white/10 space-y-8 animate-fadeIn">
+        <div class="text-center space-y-1">
+          <h1 class="text-4xl font-extrabold text-white drop-shadow-md">${name}</h1>
+          <p class="text-gray-100 text-sm">${email} • ${phone}</p>
+          <div class="w-24 h-1 mx-auto bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 rounded-full my-2"></div>
+        </div>
 
-  const name = document.getElementById('name').value;
-  const email = document.getElementById('email').value;
-  const phone = document.getElementById('phone').value;
-  const skills = document.getElementById('skills').value.split(',');
-  const experience = document.getElementById('experience').value;
-  const education = document.getElementById('education').value;
+        ${skills.length ? `
+        <div class="bg-white/30 p-5 rounded-xl shadow-inner space-y-2">
+          <h2 class="text-xl font-semibold text-white flex items-center gap-2">🛠 Skills</h2>
+          <ul class="list-disc pl-6 text-white text-sm space-y-1">
+            ${skills.map(skill => `<li>${skill}</li>`).join("")}
+          </ul>
+        </div>` : ''}
 
-  content.innerHTML = `
-  <div class="relative bg-white/20 backdrop-blur-xl p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] ring-2 ring-white/10 space-y-8 animate-fadeIn">
-    
-    <div class="text-center space-y-1">
-      <h1 class="text-4xl font-extrabold text-white drop-shadow-md">${name}</h1>
-      <p class="text-gray-100 text-sm">${email} • ${phone}</p>
-      <div class="w-24 h-1 mx-auto bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 rounded-full my-2"></div>
-    </div>
+        ${experience ? `
+        <div class="bg-white/30 p-5 rounded-xl shadow-inner space-y-2">
+          <h2 class="text-xl font-semibold text-white flex items-center gap-2">💼 Experience</h2>
+          <p class="text-white text-sm">${experience}</p>
+        </div>` : ''}
 
-    <div class="bg-white/30 p-5 rounded-xl shadow-inner space-y-2">
-      <h2 class="text-xl font-semibold text-white flex items-center gap-2"><span>🛠</span> Skills</h2>
-      <ul class="list-disc pl-6 text-white text-sm space-y-1">
-        ${skills.map(skill => `<li>${skill.trim()}</li>`).join('')}
-      </ul>
-    </div>
+        ${education ? `
+        <div class="bg-white/30 p-5 rounded-xl shadow-inner space-y-2">
+          <h2 class="text-xl font-semibold text-white flex items-center gap-2">🎓 Education</h2>
+          <p class="text-white text-sm">${education}</p>
+        </div>` : ''}
+      </div>
+    `;
 
-    <div class="bg-white/30 p-5 rounded-xl shadow-inner space-y-2">
-      <h2 class="text-xl font-semibold text-white flex items-center gap-2"><span>💼</span> Experience</h2>
-      <p class="text-white text-sm">${experience}</p>
-    </div>
+    output.classList.remove("hidden");
 
-    <div class="bg-white/30 p-5 rounded-xl shadow-inner space-y-2">
-      <h2 class="text-xl font-semibold text-white flex items-center gap-2"><span>🎓</span> Education</h2>
-      <p class="text-white text-sm">${education}</p>
-    </div>
+    // 🌀 Auto scroll to output
+    output.scrollIntoView({ behavior: "smooth" });
+  });
 
-  </div>
-`;
+  // 🔁 Dummy Fill
+  fillDummy.addEventListener("click", () => {
+    document.getElementById("name").value = "Karan Sharma";
+    document.getElementById("email").value = "karan@example.com";
+    document.getElementById("phone").value = "9876543210";
+    document.getElementById("skills").value = "HTML, CSS, JavaScript, Tailwind";
+    document.getElementById("experience").value = "1 year internship at Webify";
+    document.getElementById("education").value = "CBSE Class 12 - 2024";
+  });
 
-  output.classList.remove('hidden');
-});
-
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const phone = document.getElementById('phone').value;
-      const skills = document.getElementById('skills').value.split(',');
-      const experience = document.getElementById('experience').value;
-      const education = document.getElementById('education').value;
-
-      content.innerHTML = `
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Skills:</strong> ${skills.map(s => s.trim()).join(', ')}</p>
-        <p><strong>Experience:</strong> ${experience}</p>
-        <p><strong>Education:</strong> ${education}</p>
-      `;
-
-      output.classList.remove('hidden');
-    });
-
-    document.getElementById('fillDummy').addEventListener('click', () => {
-      document.getElementById('name').value = "Karan Sharma";
-      document.getElementById('email').value = "karan@example.com";
-      document.getElementById('phone').value = "9876543210";
-      document.getElementById('skills').value = "HTML, CSS, JS, React";
-      document.getElementById('experience').value = "1 Year Intern at Webify";
-      document.getElementById('education').value = "12th pass - CBSE (2024)";
-    });
-
-    function downloadResume() {
-      const blob = new Blob([content.innerText], { type: "text/plain;charset=utf-8" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "resume.txt";
-      link.click();
-    }
-  </script>
+  // 📄 Download .txt
+  function downloadResume() {
+    const blob = new Blob([content.innerText], { type: "text/plain;charset=utf-8" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "resume.txt";
+    link.click();
+  }
+</script>
 </body>
 </html>
