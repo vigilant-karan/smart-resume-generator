@@ -88,7 +88,43 @@
     const content = document.getElementById('outputContent');
 
     form.addEventListener('submit', (e) => {
-      e.preventDefault();
+  e.preventDefault();
+
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const phone = document.getElementById('phone').value;
+  const skills = document.getElementById('skills').value.split(',');
+  const experience = document.getElementById('experience').value;
+  const education = document.getElementById('education').value;
+
+  content.innerHTML = `
+    <div class="bg-white text-black p-6 rounded-xl shadow-xl space-y-6 font-sans max-w-3xl mx-auto">
+      <div class="text-center border-b border-gray-300 pb-4">
+        <h2 class="text-3xl font-extrabold text-gray-800">${name}</h2>
+        <p class="text-sm text-gray-500 mt-1">${email} | ${phone}</p>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-bold text-gray-700 border-b pb-1 mb-2">🛠 Skills</h3>
+        <ul class="list-disc pl-6 text-gray-800 space-y-1">
+          ${skills.map(skill => `<li>${skill.trim()}</li>`).join('')}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-bold text-gray-700 border-b pb-1 mb-2">💼 Experience</h3>
+        <p class="text-gray-800">${experience}</p>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-bold text-gray-700 border-b pb-1 mb-2">🎓 Education</h3>
+        <p class="text-gray-800">${education}</p>
+      </div>
+    </div>
+  `;
+
+  output.classList.remove('hidden');
+});
 
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
