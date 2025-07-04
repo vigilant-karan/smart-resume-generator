@@ -22,6 +22,14 @@
       50% {background-position: 100% 50%;}
       100% {background-position: 0% 50%;}
     }
+
+    @keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease-out both;
+}
   </style>
 </head>
 <body id="mainBody" class="animated-bg min-h-screen text-gray-900 font-sans transition-all duration-300">
@@ -98,30 +106,33 @@
   const education = document.getElementById('education').value;
 
   content.innerHTML = `
-    <div class="bg-white/30 backdrop-blur-xl border border-white/40 text-black p-6 rounded-3xl shadow-2xl space-y-6 font-sans max-w-3xl mx-auto ring-1 ring-white/20">
-      <div class="text-center border-b border-gray-300 pb-4">
-        <h2 class="text-3xl font-extrabold text-gray-800">${name}</h2>
-        <p class="text-sm text-gray-500 mt-1">${email} | ${phone}</p>
-      </div>
-
-      <div>
-        <h3 class="text-xl font-bold text-gray-700 border-b pb-1 mb-2">🛠 Skills</h3>
-        <ul class="list-disc pl-6 text-gray-800 space-y-1">
-          ${skills.map(skill => `<li>${skill.trim()}</li>`).join('')}
-        </ul>
-      </div>
-
-      <div>
-        <h3 class="text-xl font-bold text-gray-700 border-b pb-1 mb-2">💼 Experience</h3>
-        <p class="text-gray-800">${experience}</p>
-      </div>
-
-      <div>
-        <h3 class="text-xl font-bold text-gray-700 border-b pb-1 mb-2">🎓 Education</h3>
-        <p class="text-gray-800">${education}</p>
-      </div>
+  <div class="relative bg-white/20 backdrop-blur-xl p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] ring-2 ring-white/10 space-y-8 animate-fadeIn">
+    
+    <div class="text-center space-y-1">
+      <h1 class="text-4xl font-extrabold text-white drop-shadow-md">${name}</h1>
+      <p class="text-gray-100 text-sm">${email} • ${phone}</p>
+      <div class="w-24 h-1 mx-auto bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 rounded-full my-2"></div>
     </div>
-  `;
+
+    <div class="bg-white/30 p-5 rounded-xl shadow-inner space-y-2">
+      <h2 class="text-xl font-semibold text-white flex items-center gap-2"><span>🛠</span> Skills</h2>
+      <ul class="list-disc pl-6 text-white text-sm space-y-1">
+        ${skills.map(skill => `<li>${skill.trim()}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="bg-white/30 p-5 rounded-xl shadow-inner space-y-2">
+      <h2 class="text-xl font-semibold text-white flex items-center gap-2"><span>💼</span> Experience</h2>
+      <p class="text-white text-sm">${experience}</p>
+    </div>
+
+    <div class="bg-white/30 p-5 rounded-xl shadow-inner space-y-2">
+      <h2 class="text-xl font-semibold text-white flex items-center gap-2"><span>🎓</span> Education</h2>
+      <p class="text-white text-sm">${education}</p>
+    </div>
+
+  </div>
+`;
 
   output.classList.remove('hidden');
 });
